@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Venus Awakening — Post 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
+<link href="https://fonts.cdnfonts.com/css/glacial-indifference" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eee;
+    min-height: 100vh;
+  }
+
+  .story {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    background: #fdf6ee;
+    overflow: hidden;
+    font-family: 'Glacial Indifference', sans-serif;
+  }
+
+  .story-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('statue-amor-psyche.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    opacity: 0.16;
+  }
+
+  .glow-top {
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 900px;
+    background: radial-gradient(circle, rgba(226,149,79,0.35) 0%, rgba(226,149,79,0) 70%);
+  }
+
+  .glow-bottom {
+    position: absolute;
+    bottom: -250px; left: 50%;
+    transform: translateX(-50%);
+    width: 1000px; height: 1000px;
+    background: radial-gradient(circle, rgba(193,84,58,0.28) 0%, rgba(193,84,58,0) 70%);
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 90px;
+  }
+
+  .dots {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+  .dots span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #c1543a;
+  }
+
+  .eyebrow {
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 0.35em;
+    color: #cd8f2c;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
+
+  .hook {
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.45;
+    color: #1c1c14;
+    max-width: 840px;
+    margin-bottom: 70px;
+  }
+
+  .divider {
+    width: 160px;
+    height: 1px;
+    background: #cd8f2c;
+    margin-bottom: 60px;
+  }
+
+  .sub {
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 1.6;
+    color: #1c1c14;
+    max-width: 760px;
+    margin-bottom: 90px;
+  }
+
+  .impulse-label {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 56px;
+    color: #c1543a;
+    margin-bottom: 30px;
+  }
+
+  .impulse {
+    font-weight: 400;
+    font-size: 32px;
+    line-height: 1.6;
+    color: #7a6a5c;
+    max-width: 720px;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+  <div class="story">
+    <div class="story-bg"></div>
+    <div class="glow-top"></div>
+    <div class="glow-bottom"></div>
+    <div class="content">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <p class="eyebrow">Astro-Wissen</p>
+      <h1 class="hook">Venus ist nicht nur der Planet der Liebe.<br />Sie ist der Planet deines Selbstwerts.</h1>
+      <div class="divider"></div>
+      <p class="sub">Ihr Zeichen, ihr Haus, ihre Aspekte zeigen, wie du Liebe gibst und empfängst, was dir Genuss bedeutet — und wie viel du dir selbst wert bist.</p>
+      <p class="impulse-label">Dein Impuls</p>
+      <p class="impulse">Weißt du, in welchem Zeichen deine Venus steht?<br />Schau es dir an — und frag dich:<br />Fühlst du dich darin zuhause?</p>
+    </div>
+  </div>
+</body>
+</html>

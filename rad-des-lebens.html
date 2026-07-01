@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<title>Venus Awakening — Rad des Lebens</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet" />
+<link href="https://fonts.cdnfonts.com/css/glacial-indifference" rel="stylesheet" />
+<style>
+  @page { size: A4 portrait; margin: 0; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Glacial Indifference', sans-serif;
+    background: #fdf6ee;
+    color: #1c1c14;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 1.4cm 1.6cm 1.2cm;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+
+  .header-script {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2.8rem;
+    color: #c1543a;
+    line-height: 1.2;
+    display: block;
+  }
+
+  .header-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #cd8f2c;
+    margin-top: 0.3rem;
+    display: block;
+  }
+
+  .header-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #cd8f2c, transparent);
+    margin: 0.9rem auto 0;
+  }
+
+  /* ── INTRO TEXT ── */
+  .intro {
+    text-align: center;
+    max-width: 520px;
+    margin: 0 auto 1.8rem;
+    font-size: 0.88rem;
+    color: #7a6a5c;
+    line-height: 1.65;
+  }
+
+  /* ── WHEEL ── */
+  .wheel-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  svg {
+    overflow: visible;
+  }
+
+  /* ── NOTES GRID ── */
+  .notes-header {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .notes-header span {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.8rem;
+    color: #c1543a;
+  }
+
+  .notes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .note-box {
+    border: 1px solid rgba(193,84,58,0.25);
+    border-radius: 10px;
+    padding: 0.7rem 0.9rem;
+    background: rgba(255,255,255,0.55);
+  }
+
+  .note-box-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #c1543a;
+    margin-bottom: 0.35rem;
+  }
+
+  .note-box-number {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.4rem;
+    color: #e2954f;
+    margin-bottom: 0.2rem;
+    display: block;
+  }
+
+  .note-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    margin-top: 0.4rem;
+  }
+
+  .note-line {
+    border-bottom: 1px solid rgba(193,84,58,0.2);
+    height: 1px;
+    width: 100%;
+  }
+
+  /* ── FOOTER ── */
+  .sheet-footer {
+    text-align: center;
+    margin-top: 1.8rem;
+    font-size: 0.7rem;
+    color: #b0a090;
+    letter-spacing: 0.15em;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .note-box { background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-script">Rad des Lebens</span>
+  <span class="header-sub">Venus Awakening · Opening Circle</span>
+  <div class="header-divider"></div>
+</div>
+
+<p class="intro">
+  Bewerte jeden Bereich intuitiv von 1 (Mitte) bis 10 (äußerer Rand) —
+  wie erfüllt fühlst du dich dort gerade? Kreise die Zahl ein oder schattiere den Bereich aus.
+  Es gibt kein Richtig oder Falsch. Nur ehrliche Momentaufnahme.
+</p>
+
+<div class="wheel-wrap">
+  <svg id="wheel" width="420" height="420" viewBox="0 0 560 560"></svg>
+</div>
+
+<div class="notes-header">
+  <span>Meine Notizen</span>
+</div>
+
+<div class="notes-grid" id="notes"></div>
+
+<p class="sheet-footer">© 2026 Venus Awakening — ein Kurs von Astro mit Herz</p>
+
+<script>
+const areas = [
+  { name: "Selbstwert",                   short: "Selbstwert" },
+  { name: "Liebe",                         short: "Liebe" },
+  { name: "Freundschaften",               short: "Freundschaften" },
+  { name: "Körper &\nSinnlichkeit",       short: "Körper & Sinnlichkeit" },
+  { name: "Genuss &\nFreude",             short: "Genuss & Freude" },
+  { name: "Schönheit &\nKreativität",     short: "Schönheit & Kreativität" },
+  { name: "Fülle &\nEmpfangen",           short: "Fülle & Empfangen" },
+  { name: "Ruhe &\nNervensystem",         short: "Ruhe & Nervensystem" },
+];
+
+const svg    = document.getElementById('wheel');
+const cx     = 280, cy = 280;
+const R      = 210;   // outer radius
+const rings  = 10;
+const segs   = areas.length;
+const gold   = '#c1543a';
+const goldL  = '#e2954f';
+const muted  = '#d4c4b4';
+const cream  = '#fdf6ee';
+
+function toRad(deg) { return deg * Math.PI / 180; }
+function pt(r, deg) {
+  return [cx + r * Math.cos(toRad(deg)), cy + r * Math.sin(toRad(deg))];
+}
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+// ── background circle ──
+el('circle', { cx, cy, r: R, fill: cream, stroke: muted, 'stroke-width': 0.5 }, svg);
+
+// ── concentric rings ──
+for (let i = 1; i <= rings; i++) {
+  const r = (R / rings) * i;
+  const isLast = i === rings;
+  el('circle', {
+    cx, cy, r,
+    fill: 'none',
+    stroke: isLast ? gold : muted,
+    'stroke-width': isLast ? 1.5 : 0.6,
+    'stroke-dasharray': isLast ? '' : (i % 2 === 0 ? '' : '3 3'),
+    opacity: isLast ? 1 : 0.7
+  }, svg);
+}
+
+// ── segment dividers ──
+for (let i = 0; i < segs; i++) {
+  const deg = -90 + i * (360 / segs);
+  const [x1, y1] = pt(0, deg);
+  const [x2, y2] = pt(R, deg);
+  el('line', { x1, y1, x2, y2, stroke: gold, 'stroke-width': 1, opacity: 0.5 }, svg);
+}
+
+// ── ring numbers (1 and 10) ──
+for (let i = 1; i <= rings; i++) {
+  const r = (R / rings) * i;
+  const [tx, ty] = pt(r - (R / rings / 2), -90);
+  const num = el('text', {
+    x: tx, y: ty + 4,
+    'text-anchor': 'middle',
+    'font-family': 'Glacial Indifference, sans-serif',
+    'font-size': '8',
+    fill: i === 10 ? gold : '#b0a090',
+    'font-weight': i === 10 ? '700' : '400',
+  }, svg);
+  num.textContent = i;
+}
+
+// ── center dot ──
+el('circle', { cx, cy, r: 4, fill: gold }, svg);
+
+// ── segment labels ──
+const labelR = R + 28;
+for (let i = 0; i < segs; i++) {
+  const midDeg = -90 + i * (360 / segs) + (360 / segs / 2);
+  const [lx, ly] = pt(labelR, midDeg);
+
+  const lines = areas[i].name.split('\n');
+  const g = el('g', {}, svg);
+
+  // anchor logic
+  let anchor = 'middle';
+  const cosA = Math.cos(toRad(midDeg));
+  if (cosA > 0.3) anchor = 'start';
+  else if (cosA < -0.3) anchor = 'end';
+
+  lines.forEach((line, li) => {
+    const t = el('text', {
+      x: lx,
+      y: ly + (li - (lines.length - 1) / 2) * 13,
+      'text-anchor': anchor,
+      'font-family': 'Glacial Indifference, sans-serif',
+      'font-size': '10.5',
+      'font-weight': '700',
+      fill: '#1c1c14',
+      'letter-spacing': '0.04em',
+    }, g);
+    t.textContent = line;
+  });
+}
+
+// ── notes grid ──
+const grid = document.getElementById('notes');
+areas.forEach((a, i) => {
+  const box = document.createElement('div');
+  box.className = 'note-box';
+  box.innerHTML = `
+    <div class="note-box-title">${a.short}</div>
+    <span class="note-box-number">${i + 1}</span>
+    <div class="note-lines">
+      <div class="note-line"></div>
+      <div class="note-line"></div>
+      <div class="note-line"></div>
+    </div>
+  `;
+  grid.appendChild(box);
+});
+</script>
+</body>
+</html>
