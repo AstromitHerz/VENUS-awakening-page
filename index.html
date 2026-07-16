@@ -1509,18 +1509,44 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <script>
-    // ── Preloader ──
-    window.addEventListener('load', () => {
+    // ── Preloader + Failsafe ──
+    // Die Seite muss IMMER sichtbar und scrollbar werden, auch wenn GSAP
+    // (externes CDN) blockiert ist oder das load-Event nie feuert.
+    function hidePreloader() {
       const pre = document.querySelector('.preloader');
-      setTimeout(() => {
-        pre.style.opacity = '0';
-        pre.style.visibility = 'hidden';
-        setTimeout(() => pre.remove(), 800);
-        startAnimations();
-      }, 600);
-    });
+      if (!pre) return;
+      pre.style.opacity = '0';
+      pre.style.visibility = 'hidden';
+      setTimeout(() => pre.remove(), 800);
+    }
+    function revealAll() {
+      document.querySelectorAll('.reveal').forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+    }
 
-    gsap.registerPlugin(ScrollTrigger);
+    if (typeof gsap === 'undefined') {
+      // GSAP nicht geladen → statische Seite sofort zeigen, ohne Animation.
+      hidePreloader();
+      revealAll();
+    } else {
+      gsap.registerPlugin(ScrollTrigger);
+      let started = false;
+      function start() {
+        if (started) return;
+        started = true;
+        hidePreloader();
+        startAnimations();
+      }
+      if (document.readyState === 'complete') {
+        setTimeout(start, 400);
+      } else {
+        window.addEventListener('load', () => setTimeout(start, 400));
+      }
+      // Notbremse: spätestens nach 3s starten, falls load nie feuert.
+      setTimeout(start, 3000);
+    }
 
     // ── Custom Cursor (desktop only) ──
     if (window.matchMedia('(pointer: fine)').matches) {
